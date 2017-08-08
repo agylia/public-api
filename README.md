@@ -8,13 +8,13 @@ The base url for the API is:
 Call calls to the API must be made by using HTTPS.
 
 ### Authentication
-Authentication is done by using Basic Authentication over SSL/HTTPS. Your user name is the full domain name for your Reach Admin Portal e.g. `example.admin-agylia.com`. Your password is you API key e.g. `7c82041e63db436eb0a681d6910d71aedf32656ef23`. 
+Authentication uses Basic Authentication over SSL/HTTPS. Your user name is the full domain name for your Reach Administration Portal e.g. `example.admin-agylia.com`. Your password is your API key e.g. `7c82041e63db436eb0a681d6910d71aedf32656ef23`. 
 
-You can find your API key in the Reach Admin Portal by logging in, and then clicking _Settings_ -> _General_.
+You can find your API key in the Reach Administration Portal by logging in, and then clicking _Settings_ -> _General_.
 
 ### Request Style
 #### REST and RPC
-All our APIs support an informal RPC style. Many of the APIs also support REST semantics, with a view to making all APIs supporting both styles as the API platform develops.
+All APIs support an informal RPC style. Many of the APIs also support REST semantics, with a view to making all APIs supporting both styles as the API platform develops.
 
 Our informal RPC style is to `POST` a message to a named URL, where the payload contains the message data e.g.
 
@@ -37,22 +37,22 @@ GET /users/example HTTP/1.1
 Host: api.portal-agylia.com
 ```
 
-Both of these examples are equivalent, they both get a user, simply using the two different styles supported.
+Both of these examples are equivalent, they both get a user by simply using the two different styles supported.
 
-Each section states which call styles are supported.
+Each section in the following documentation states which call styles are supported.
 
 ---
 
 ## APIs
 ### Users
-The user APIs enable you perform user management tasks, such as creating, updating and removing users, as well as the ability to update group memberships. All APIs support both RPC and REST styles.
+The user APIs enable you perform user management tasks, such as creating, updating and removing users, as well as updating user group membership. All APIs support both RPC and REST styles.
 
 #### Create a user
 You can use the _SetUser_ API to create or update a user.
 
-You can specify the attributes to be associated with a user, including group and OU memberships. When creating users you can also specify the password for user. If you add a user to a group that does not yet exist the API will create the group for you.
+You can specify the attributes to be associated with a user, including group and OU memberships. When creating users you can also specify the password for the user. If you add a user to a group that does not yet exist, the API will create the group for you.
 
-Create requests typically do not happen in real-time. After the request has been validated and accepted the API returns a `202 Accepted`. With this in mind you can can specify a callback address, which the service will attempt to call upon completion of or the request.
+Create requests typically do not happen in real-time. After the request has been validated and accepted the API returns a `202 Accepted`. With this in mind you can can specify a callback address, which the service will attempt to call upon completion of the request.
 
 If the user exists and the create action is specified then the service will return a `409`.
 
@@ -93,7 +93,7 @@ If the user exists and the create action is specified then the service will retu
 | 429 | Too Many Requests - Rate limiting |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
-When you receive a `202 Accepted` response, a `Location` header is also returned with the response. This header contains a relative route and a transition ID. If you supply a `callback` URL in the request you'll receive status update when the message has been processed. However, you can also query the status of you request by calling the status route, appending the `Location` header value:
+When you receive a `202 Accepted` response, a `Location` header is also returned with the response. This header contains a relative route and a transition ID. If you supply a `callback` URL in the request you'll receive a status update when the message has been processed. However, you can also query the status of you request by calling the status route, appending the `Location` header value:
 
 ```
 202 Accepted
@@ -101,7 +101,7 @@ Location: /status/123
 ...
 ```
 
-Given the above response, example to get the status of the request:
+Given the above response, here is an example to get the status of the request:
 
 ```
 curl "https://$API_HOST/status/123" \
@@ -209,7 +209,7 @@ You can use the _SetUser_ API to update a user.
 
 You can specify the attributes to be associated with a user, including group and OU memberships. This API uses merge semantics. If you add a user to a group that does not yet exist the API will create the group for you.
 
-Updates requests typically do not happen in real-time. After the request has been validated and accepted the API returns a `202 Accepted`. With this in mind you can can specify a callback address, which the service will attempt to call upon completion of or the request.
+Update requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can can specify a callback address, which the service will attempt to call upon completion of the request.
 
 If the user does not exist the service will return a `404`.
 
@@ -297,9 +297,9 @@ curl -X "POST" "https://$API_HOST/DeleteUser" \
 #### Add and remove a user from a group
 You can use the _SetUser_ API to update the group memberships for a user.
 
-If you add a user to a group that does not yet exist the API will create the group for you.
+If you add a user to a group that does not yet exist, the API will create the group for you.
 
-This type of request typically do not happen in real-time. After the request has been validated and accepted the API returns a `202 Accepted`. With this in mind you can can specify a callback address, which the service will attempt to call upon completion of or the request.
+This type of request typically does not happen in real-time. After the request has been validated and accepted the API returns a `202 Accepted`. With this in mind you can can specify a callback address, which the service will attempt to call upon completion of the request.
 
 If the user does not exist the service returns a `404`.
 
@@ -355,7 +355,7 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 --- 
 
 ### Reports
-The reports APIs enable you to get activity reports for your users, or an individual user. All APIs support on the RPC style at this time.
+The reports APIs enable you to get activity reports for your users, or an individual user. All APIs support only the RPC style at this time.
 
 #### User Activity
 You can use the _GetUserActivity_ API to retrieve the activity history for a specified user. This includes any content/items that are in-progress or completed. This call happens in real-time.
