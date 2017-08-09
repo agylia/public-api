@@ -8,9 +8,9 @@ The base url for the API is:
 Call calls to the API must be made by using HTTPS.
 
 ### Authentication
-Authentication uses Basic Authentication over SSL/HTTPS. Your user name is the full domain name for your Reach Administration Portal e.g. `example.admin-agylia.com`. Your password is your API key e.g. `7c82041e63db436eb0a681d6910d71aedf32656ef23`. 
+Authentication uses Basic Authentication over SSL/HTTPS. Your user name is the full domain name for your Agylia Administration Portal e.g. `example.admin-agylia.com`. Your password is your API key e.g. `7c82041e63db436eb0a681d6910d71aedf32656ef23`. 
 
-You can find your API key in the Reach Administration Portal by logging in, and then clicking _Settings_ -> _General_.
+You can find your API key in the Agylia Administration Portal by logging in, and then clicking _Settings_ -> _General_.
 
 ### Request Style
 #### REST and RPC
