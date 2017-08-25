@@ -13,10 +13,7 @@ Authentication uses Basic Authentication over SSL/HTTPS. Your user name is the f
 You can find your API key in the Agylia Administration Portal by logging in, and then clicking _Settings_ -> _General_.
 
 ### Request Style
-#### REST and RPC
-All APIs support an informal RPC style. Many of the APIs also support REST semantics, with a view to making all APIs supporting both styles as the API platform develops.
-
-Our informal RPC style is to `POST` a message to a named URL, where the payload contains the message data e.g.
+All APIs support an informal RPC style. Our informal RPC style is to `POST` a message to a named URL, where the payload contains the message data e.g.
 
 ```
 POST /GetUser HTTP/1.1
@@ -30,22 +27,11 @@ Content-Type: application/json
 }
 ```
 
-Our REST style supports sending requests to a resource, e.g. `users`, `reports`, etc. and then the HTTP verb/method determines the desired action e.g.
-
-```
-GET /users/example HTTP/1.1
-Host: api.portal-agylia.com
-```
-
-Both of these examples are equivalent, they both get a user by simply using the two different styles supported.
-
-Each section in the following documentation states which call styles are supported.
-
 ---
 
 ## APIs
 ### Users
-The user APIs enable you perform user management tasks, such as creating, updating and removing users, as well as updating user group membership. All APIs support both RPC and REST styles.
+The user APIs enable you perform user management tasks, such as creating, updating and removing users, as well as updating user group membership.
 
 #### Create a user
 You can use the _SetUser_ API to create or update a user.
