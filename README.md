@@ -8,7 +8,7 @@ The base url for the API is:
 Call calls to the API must be made by using HTTPS.
 
 ### Authentication
-Authentication uses Basic Authentication over SSL/HTTPS. Your user name is the full domain name for your Agylia Administration Portal e.g. `example.admin-agylia.com`. Your password is your API key e.g. `7c82041e63db436eb0a681d6910d71aedf32656ef23`. 
+Authentication uses Basic Authentication over SSL/HTTPS. Your user name is the full domain name for your Agylia Administration Portal e.g. `example.admin-agylia.com`. Your password is your API key e.g. `7c82041e63db436eb0a681d6910d71aedf32656ef23`.
 
 You can find your API key in the Agylia Administration Portal by logging in, and then clicking _Settings_ -> _General_.
 
@@ -45,11 +45,11 @@ If the user exists and the create action is specified then the service will retu
 ```
 {
     // Message arguments
-    params: { 
+    params: {
         action: create,
         callback: url      // optional, default nil
     },
-    
+
     // Profile fields
     profile:{
        username: string    // required
@@ -92,7 +92,7 @@ Given the above response, here is an example to get the status of the request:
 ```
 curl "https://$API_HOST/status/123" \
      -u "scope:api_key"
-     
+
 HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -144,7 +144,7 @@ You can use the _GetUser_ API to read a user. This call returns all the profile 
 ```
 {
     // Message arguments
-    params: { 
+    params: {
         uid: string    // required, username for the user
     }
 }
@@ -202,12 +202,12 @@ If the user does not exist the service will return a `404`.
 ```
 {
     // Message arguments
-    params: { 
+    params: {
         action: update,
         uid: string,       // required, username
         callback: url      // optional, default nil
     },
-    
+
     // Profile fields
     profile:{
        ...                 // additional user attributes
@@ -251,7 +251,7 @@ If the user does not exist the service will return a `404`.
 ```
 {
     // Message arguments
-    params: { 
+    params: {
         uid: string    // required, username for the user
     }
 }
@@ -292,7 +292,7 @@ If the user does not exist the service returns a `404`.
 ```
 {
     // Message arguments
-    params: { 
+    params: {
         action: update,
         uid: string,       // required, username
         callback: url      // optional, default nil
@@ -338,7 +338,7 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 }'
 ```
 
---- 
+---
 
 ### Reports
 The reports APIs enable you to get activity reports for your users, or an individual user. All APIs support only the RPC style at this time.
@@ -351,7 +351,7 @@ This API supports paging. You can specify a starting index, and the number of it
 ```
 {
     // Message arguments
-    params: { 
+    params: {
         uid: string,       // required, username
         from: number,      // optional, items to skip, default 0
         size: number       // optional, total returns per page, default 50
@@ -403,7 +403,7 @@ You can use the _GetUsersActivity_ API to retrieve any and all activity that has
 ```
 {
     // Message arguments
-    params: { 
+    params: {
         date: string,       // required, on or after date
     }
 }
@@ -448,13 +448,111 @@ curl -X "POST" "https://$API_HOST/GetUserActivity" \
 }'
 ```
 
---- 
+---
 
-### Catalogue (Coming Soon)
+### Catalogue
 The catalogues APIs enable you to request information about your catalogue items.
 
 #### My Learning
-Coming soon.
+You can use the _GetMyLearning_ API to retrieve all that mandatory content items that are targeted to the passed user reference. This call happens in real-time.
+
+```
+{
+    // Message arguments
+    params: {
+        uid: string,       // required, username
+    }
+}
+```
+
+##### Response
+```
+
+{
+  "items": [
+    {
+      "description": string,
+      "name": string,
+      "ref": string,
+      "score": null|number,
+      "status": string,
+      "thumbnail": url
+    }
+    ...
+  ]
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/GetMyLearning" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "uid": "example"
+  }
+}'
+```
 
 #### My Catalogue
-Coming soon.
+You can use the _GetMyCatalogue_ API to retrieve all content items that are targeted to the passed user reference. This call happens in real-time.
+
+```
+{
+    // Message arguments
+    params: {
+        uid: string,       // required, username
+    }
+}
+```
+
+##### Response
+```
+
+{
+  "items": [
+    {
+      "description": string,
+      "name": string,
+      "ref": string,
+      "score": null|number,
+      "status": string,
+      "thumbnail": url
+    }
+    ...
+  ]
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/GetMyCatalogue" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "uid": "example"
+  }
+}'
+```
