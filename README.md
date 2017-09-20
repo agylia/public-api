@@ -344,7 +344,7 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 The reports APIs enable you to get activity reports for your users, or an individual user. All APIs support only the RPC style at this time.
 
 #### User Activity
-You can use the _GetUserActivity_ API to retrieve the activity history for a specified user. This includes any content/items that are in-progress or completed. This call happens in real-time.
+You can use the _GetUserActivity_ API to retrieve the activity history for a specified user. This includes any content/items that are in-progress or completed. User activity is returned for all content types including courses, curricula, files, events, weblinks, tasks and independent learning activies. This call happens in real-time.
 
 This API supports paging. You can specify a starting index, and the number of items to return per page.
 
