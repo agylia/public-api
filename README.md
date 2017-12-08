@@ -366,7 +366,7 @@ This API supports paging. You can specify a starting index, and the number of it
     {
         "date": string,
         "ref": string,
-        "score": null | string,
+        "score": null | number,
         "status": string,
         "title": string
     },
@@ -415,10 +415,13 @@ You can use the _GetUsersActivity_ API to retrieve any and all activity that has
     "activities": [
     {
         "completed_date": string,
+        "date": string,
+        "external_ref": string,
         "ref": string,
-        "score": null|number,
+        "score": null | number,
         "status": string,
         "title": string,
+        "type": string,
         "username": string
     },
     ...
@@ -437,13 +440,12 @@ You can use the _GetUsersActivity_ API to retrieve any and all activity that has
 
 ##### Example
 ```
-curl -X "POST" "https://$API_HOST/GetUserActivity" \
+curl -X "POST" "https://$API_HOST/GetUsersActivity" \
      -H "Content-Type: application/json; charset=utf-8" \
      -u "scope:api_key" \
      -d $'{
   "params": {
-    "uid": "example",
-    "size": 5
+    "date": "2017-01-25T11:44:18.856Z"
   }
 }'
 ```
