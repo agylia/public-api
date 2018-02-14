@@ -48,6 +48,7 @@ If the user exists and the create action is specified then the service will retu
     params: {
         action: create,
         callback: url      // optional, default nil
+        auth_mode: string   // optional, values should be either: sso or forms
     },
 
     // Profile fields
@@ -59,7 +60,7 @@ If the user exists and the create action is specified then the service will retu
     // Password information
     password: {
        value: string,      // required
-       send_welcome: bool  // optional, default: true
+       send_welcome: bool  // optional, default: false
     },
 
     // Groups information
