@@ -40,6 +40,8 @@ You can specify the attributes to be associated with a user, including group and
 
 Create requests typically do not happen in real-time. After the request has been validated and accepted the API returns a `202 Accepted`. With this in mind you can can specify a callback address, which the service will attempt to call upon completion of the request.
 
+You can use the `send_welcome` parameter to enable the sending of a welcome email message for new user accounts. The default is to suppress the sending of welcome emails.
+
 If the user exists and the create action is specified then the service will return a `409`.
 
 ```
@@ -47,8 +49,9 @@ If the user exists and the create action is specified then the service will retu
     // Message arguments
     params: {
         action: create,
-        callback: url      // optional, default nil
-        auth_mode: string   // optional, values should be either: sso or forms
+        callback: url      // optional, default: nil
+        auth_mode: string  // optional, values should be either: sso or forms
+        send_welcome: bool // optional, default: false
     },
 
     // Profile fields
@@ -59,8 +62,7 @@ If the user exists and the create action is specified then the service will retu
 
     // Password information
     password: {
-       value: string,      // required
-       send_welcome: bool  // optional, default: false
+       value: string       // required
     },
 
     // Groups information
