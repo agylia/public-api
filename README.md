@@ -11,7 +11,7 @@ All calls to the API must be made by using HTTPS.
 ### Authentication
 Authentication uses Basic Authentication over SSL/HTTPS. Your user name is the full domain name for your Agylia Administration Portal e.g. `example.admin-agylia.com`. Your password is your API key e.g. `7c82041e63db436eb0a681d6910d71aedf32656ef23`.
 
-You can find your API key in the Agylia Administration Portal by logging in, and then clicking _Settings_ -> _General_.
+You can find your API key in the Agylia Administration Portal by logging in, and then clicking _Settings_ -> _Advanced_.
 
 ### Request Style
 All APIs support an informal RPC style. Our informal RPC style is to `POST` a message to a named URL, where the payload contains the message data e.g.
