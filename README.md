@@ -3,9 +3,10 @@
 ### API Base URL
 The base url for the API is:
 
-`https://api.portal-agylia.com`
+ - For EU customers `https://api.portal-agylia.com`
+ - For US customers `https://api.portal-agylia.com/us`
 
-Call calls to the API must be made by using HTTPS.
+All calls to the API must be made by using HTTPS.
 
 ### Authentication
 Authentication uses Basic Authentication over SSL/HTTPS. Your user name is the full domain name for your Agylia Administration Portal e.g. `example.admin-agylia.com`. Your password is your API key e.g. `7c82041e63db436eb0a681d6910d71aedf32656ef23`.
