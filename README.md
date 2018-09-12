@@ -3,14 +3,15 @@
 ### API Base URL
 The base url for the API is:
 
-`https://api.portal-agylia.com`
+ - For EU customers `https://api.portal-agylia.com`
+ - For US customers `https://api.portal-agylia.com/us`
 
-Call calls to the API must be made by using HTTPS.
+All calls to the API must be made by using HTTPS.
 
 ### Authentication
 Authentication uses Basic Authentication over SSL/HTTPS. Your user name is the full domain name for your Agylia Administration Portal e.g. `example.admin-agylia.com`. Your password is your API key e.g. `7c82041e63db436eb0a681d6910d71aedf32656ef23`.
 
-You can find your API key in the Agylia Administration Portal by logging in, and then clicking _Settings_ -> _General_.
+You can find your API key in the Agylia Administration Portal by logging in, and then clicking _Settings_ -> _Advanced_.
 
 ### Request Style
 All APIs support an informal RPC style. Our informal RPC style is to `POST` a message to a named URL, where the payload contains the message data e.g.
@@ -558,6 +559,47 @@ curl -X "POST" "https://$API_HOST/GetMyCatalogue" \
      -d $'{
   "params": {
     "uid": "example"
+  }
+}'
+```
+
+#### EnrolLearner
+
+You can use the _EnrolLearner_ API to enrol a user on a content item i.e. a catalogue item or a session.
+
+```
+{
+    // Message arguments
+    params: {
+        uid: string,       // required, username
+        ref: string,       // required, content item external reference
+    },
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 400 | Bad Request – The user is not targeted to the content item |
+| 400 | Bad Request – There are no seats available on the session |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 404 | Not Found – The username cannot be found |
+| 404 | Not Found – The content item cannot be found |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/EnrolLearner" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "uid": "example",
+    "ref": "example"
   }
 }'
 ```
