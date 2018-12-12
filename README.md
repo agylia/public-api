@@ -39,7 +39,7 @@ You can use the _SetUser_ API to create or update a user.
 
 You can specify the attributes to be associated with a user, including group and OU memberships. When creating users you can also specify the password for the user. If you add a user to a group that does not yet exist, the API will create the group for you.
 
-Create requests typically do not happen in real-time. After the request has been validated and accepted the API returns a `202 Accepted`. With this in mind you can can specify a callback address, which the service will attempt to call upon completion of the request.
+Create requests typically do not happen in real-time. After the request has been validated and accepted the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request.
 
 You can use the `send_welcome` parameter to enable the sending of a welcome email message for new user accounts. The default is to suppress the sending of welcome emails.
 
@@ -199,7 +199,7 @@ You can use the _SetUser_ API to update a user.
 
 You can specify the attributes to be associated with a user, including group and OU memberships. This API uses merge semantics. If you add a user to a group that does not yet exist the API will create the group for you.
 
-Update requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can can specify a callback address, which the service will attempt to call upon completion of the request.
+Update requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request.
 
 If the user does not exist the service will return a `404`.
 
@@ -246,6 +246,89 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 }'
 ```
 
+#### Deactivate a user
+You can use the _SetUser_ API to deactivate a user.
+
+Deactivate requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request.
+
+If the user does not exist the service will return a `404`.
+
+```
+{
+    // Message arguments
+    params: {
+        action: deactivate,
+        uid: string,       // required, username
+        callback: url      // optional, default nil
+    }
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 202 | Accepted — Your request has been accepted |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 404 | Not Found – There username cannot be found |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/SetUser" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "uid": "example",
+    "action": "deactivate"
+  }
+}'
+```
+
+#### Activate a user
+You can use the _SetUser_ API to activate a user.
+
+Activate requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request.
+
+If the user does not exist the service will return a `404`.
+
+```
+{
+    // Message arguments
+    params: {
+        action: activate,
+        uid: string,       // required, username
+        callback: url      // optional, default nil
+    }
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 202 | Accepted — Your request has been accepted |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 404 | Not Found – There username cannot be found |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/SetUser" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "uid": "example",
+    "action": "activate"
+  }
+}'
+```
 
 #### Remove a user
 You can use the _DeleteUser_ API to remove a user. This call will remove all the user properties from the system including all group memberships. This call happens in real-time.
@@ -289,7 +372,7 @@ You can use the _SetUser_ API to update the group memberships for a user.
 
 If you add a user to a group that does not yet exist, the API will create the group for you.
 
-This type of request typically does not happen in real-time. After the request has been validated and accepted the API returns a `202 Accepted`. With this in mind you can can specify a callback address, which the service will attempt to call upon completion of the request.
+This type of request typically does not happen in real-time. After the request has been validated and accepted the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request.
 
 If the user does not exist the service returns a `404`.
 
@@ -563,7 +646,7 @@ curl -X "POST" "https://$API_HOST/GetMyCatalogue" \
 }'
 ```
 
-#### EnrolLearner
+#### Enrol Learner
 
 You can use the _EnrolLearner_ API to enrol a user on a content item i.e. a catalogue item or a session.
 
