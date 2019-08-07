@@ -481,6 +481,70 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 }'
 ```
 
+#### Validate user credentials
+You can use the _ValidateSignature_ API to validate the username and password
+for a non SSO user account.
+
+To do this you need to supply an encrypted signature that contains the username, password, and a timestamp i.e. `username+password+2019-08-07T09:25:44.686Z`. To generate
+a valid signature you must:
+
+ - Use a valid UTC ISO date as the timestamp.
+ - Build a string containing the username, password, and the timestamp concatenated by the `+` symbol.
+ - Encrypt the string with the `aes-256-cbc` symmetric algorithm as follows:
+   - The encryption key should be an `md5` hash of your API key.
+   - The Initialization Vector (IV) should be a random `16` byte value.
+   - The final cypher text should be a concatenation of the IV and encrypted value.
+ - Encode the signature (cypher text) as `base64`.
+
+```
+{
+    // Message arguments
+    params: {
+        signature: string   // required, base64 cypher text
+    }
+}
+```
+
+##### Response
+```
+{
+  "status": "Valid"
+}
+```
+
+The `status` can be one of the following values:
+
+ - Valid
+ - InvalidPassword
+ - Deactivated
+ - RequiresApproval
+ - RequiresNewPasswordWithEmailVerification
+ - RequiresNewPassword
+
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 404 | Not Found – There username cannot be found |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/ValidateSignature" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "signature": "QVD3c1vuDNGc7HJa2Oz7p20PDtI6ISx3OMv/RXuTQafm/dNtrtm15Mr42vkeeP2WJN10xsMlUOuzq1G6ZJV+Ur1IHsm8Ddr2qYVZc/9ZFMk="
+  }
+}'
+```
+
 ---
 
 ### Reports
