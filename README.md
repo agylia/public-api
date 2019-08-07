@@ -686,3 +686,194 @@ curl -X "POST" "https://$API_HOST/EnrolLearner" \
   }
 }'
 ```
+
+---
+
+### Continuing Professional Development (CPD)
+The CPD APIs enable you to perform CPD management tasks, such as creating, updating and listing journals.
+
+#### Create a journal
+You can use the _SetJournal_ API to create a CPD journal.
+
+You can specify the attributes to be associated with a CPD journal, including a start date, end date, submission date, and status.
+
+```
+{
+    // Message arguments
+    params: {
+        action: create,
+        uid: string    // required, username
+    },
+
+    // Journal fields
+    journal: {
+       startDate: string,       // required
+       endDate: string,         // required
+       submissionDate: string,  // additional attribute
+       status: string           // additional attribute
+    },
+}
+```
+
+The optional `status` attribute supports the following values:
+
+ - Pending
+ - Submitted
+ - Accepted
+ - Rejected
+ - YearBreak
+
+##### Response
+```
+{
+   "ref": string
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 404 | Not Found - Their username cannot be found |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/SetJournal" \
+     -H "Content-Type: application/json" \
+     -u "scope:api_key" \
+     -d $'{
+ "params": {
+   "uid": "example",
+   "action": "create"
+ },
+ "journal": {
+   "endDate": "2019-12-31T17:00:00Z",
+   "startDate": "2019-01-01T08:00:00Z",
+   "status": "Submitted"
+ }
+}'
+```
+
+#### Get journals
+You can use the _GetJournals_ API to retrieve all CPD journals to the passed user reference.
+
+```
+{
+    // Message arguments
+    params: {
+        uid: string    // required, username
+    }
+}
+```
+
+##### Response
+```
+{
+    "items": [
+    {
+      "ref": string,
+      "startDate": string,
+      "endDate": string,
+      "submissionDate": string,
+      "status": string
+    },
+    ...
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 404 | Not Found - Their username cannot be found |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/GetJournals" \
+     -H "Content-Type: application/json" \
+     -u "scope:api_key" \
+     -d $'{
+ "params": {
+   "uid": "example"
+ }
+}'
+```
+
+#### Update a journal
+You can use the _SetJournal_ API to update a CPD journal.
+
+You can specify the attributes to be associated with a CPD journal, including a start date, end date, submission date, and status.
+
+```
+{
+    // Message arguments
+    params: {
+        action: update,
+        uid: string,    // required, username
+        ref: string     // required, journal reference
+    },
+
+    // Journal fields
+    journal: {
+       startDate: string,       // required
+       endDate: string,         // required
+       submissionDate: string,  // additional attribute
+       status: string           // additional attribute
+    },
+}
+```
+
+The optional `status` attribute supports the following values:
+
+ - Pending
+ - Submitted
+ - Accepted
+ - Rejected
+ - YearBreak
+
+##### Response
+```
+{
+  "ref": string
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 404 | Not Found - Their username or journal cannot be found |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/SetJournal" \
+     -H "Content-Type: application/json" \
+     -u "scope:api_key" \
+     -d $'{
+ "params": {
+   "uid": "example",
+   "ref": "example",
+   "action": "update"
+ },
+ "journal": {
+   "endDate": "2019-12-31T17:00:00Z",
+   "startDate": "2019-01-01T08:00:00Z",
+   "status": "Accepted"
+ }
+}'
+```
