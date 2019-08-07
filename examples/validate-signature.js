@@ -20,7 +20,7 @@ function buildSignature (apiKey, username, password){
   const iv      = crypto.randomBytes(16);
   const cipher  = crypto.createCipheriv('aes-256-cbc', key, iv);
 
-  const rawData       = username + "+" + password + "+" + new Date().toISOString();
+  const rawData = ":u:" + username + ":p:" + password + ":t:" + new Date().toISOString();
   const encryptedData = cipher.update(rawData);
   const cipherText    = Buffer.concat([encryptedData, cipher.final()]);
 

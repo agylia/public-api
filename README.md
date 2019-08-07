@@ -485,11 +485,13 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 You can use the _ValidateSignature_ API to validate the username and password
 for a non SSO user account.
 
-To do this you need to supply an encrypted signature that contains the username, password, and a timestamp i.e. `username+password+2019-08-07T09:25:44.686Z`. To generate
-a valid signature you must:
+To do this you need to supply an encrypted signature that contains the username, password, and a timestamp i.e. a username of `user1`, a password of `P@$$`, and a timestamp of `2019-08-07T09:25:44.686Z` becomes `:u:user1:p:P@$$:t:2019-08-07T09:25:44.686Z`. This value then needs to be encrypted.
+
+To generate a valid signature you must:
 
  - Use a valid UTC ISO date as the timestamp.
- - Build a string containing the username, password, and the timestamp concatenated by the `+` symbol.
+ - Build a string containing the username, password, and the timestamp with the
+ `:u:`, `:p:`, and `:t:` separators.
  - Encrypt the string with the `aes-256-cbc` symmetric algorithm as follows:
    - The encryption key should be an `md5` hash of your API key.
    - The Initialization Vector (IV) should be a random `16` byte value.
