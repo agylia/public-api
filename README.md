@@ -194,6 +194,62 @@ curl -X "POST" "https://$API_HOST/GetUser" \
 }'
 ```
 
+#### Read modified users
+You can use the _GetModifiedUsers_ API to retrieve any user records that have been
+created or updated since the supplied input date/time. This call happens in real-time.
+
+```
+{
+    // Message arguments
+    params: {
+        date: string,       // required, on or after date
+    }
+}
+```
+
+##### Response
+```
+{
+  "users": [
+  {
+    "groups":[{
+      "name": string
+    }],
+    "params": {
+      "uid": string
+    },
+    "profile": {
+      "forename": string,
+      "mail": string,
+      ...
+    }
+  },
+  ...
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/GetModifiedUsers" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "date": "2017-01-25T11:44:18.856Z"
+  }
+}'
+```
+
 #### Update a user
 You can use the _SetUser_ API to update a user.
 
