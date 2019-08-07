@@ -485,13 +485,14 @@ curl -X "POST" "https://$API_HOST/GetUserActivity" \
 ```
 
 #### Users Activity
-You can use the _GetUsersActivity_ API to retrieve any and all activity that has occurred for any user since the supplied input date/time. This call happens in real-time.
+You can use the _GetUsersActivity_ API to retrieve any and all activity that has occurred for any user since the supplied input date/time. You can also optionally restrict the results to records in a particular state. This call happens in real-time.
 
 ```
 {
     // Message arguments
     params: {
         date: string,       // required, on or after date
+        states: array       // optional, filter results to specified states
     }
 }
 ```
@@ -532,7 +533,8 @@ curl -X "POST" "https://$API_HOST/GetUsersActivity" \
      -u "scope:api_key" \
      -d $'{
   "params": {
-    "date": "2017-01-25T11:44:18.856Z"
+    "date": "2017-01-25T11:44:18.856Z",
+    "states": ["completed", "enrolled"]
   }
 }'
 ```
