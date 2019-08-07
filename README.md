@@ -194,6 +194,62 @@ curl -X "POST" "https://$API_HOST/GetUser" \
 }'
 ```
 
+#### Read modified users
+You can use the _GetModifiedUsers_ API to retrieve any user records that have been
+created or updated since the supplied input date/time. This call happens in real-time.
+
+```
+{
+    // Message arguments
+    params: {
+        date: string,       // required, on or after date
+    }
+}
+```
+
+##### Response
+```
+{
+  "users": [
+  {
+    "groups":[{
+      "name": string
+    }],
+    "params": {
+      "uid": string
+    },
+    "profile": {
+      "forename": string,
+      "mail": string,
+      ...
+    }
+  },
+  ...
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/GetModifiedUsers" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "date": "2017-01-25T11:44:18.856Z"
+  }
+}'
+```
+
 #### Update a user
 You can use the _SetUser_ API to update a user.
 
@@ -425,6 +481,70 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 }'
 ```
 
+#### Validate user credentials
+You can use the _ValidateSignature_ API to validate the username and password
+for a non SSO user account.
+
+To do this you need to supply an encrypted signature that contains the username, password, and a timestamp i.e. `username+password+2019-08-07T09:25:44.686Z`. To generate
+a valid signature you must:
+
+ - Use a valid UTC ISO date as the timestamp.
+ - Build a string containing the username, password, and the timestamp concatenated by the `+` symbol.
+ - Encrypt the string with the `aes-256-cbc` symmetric algorithm as follows:
+   - The encryption key should be an `md5` hash of your API key.
+   - The Initialization Vector (IV) should be a random `16` byte value.
+   - The final cypher text should be a concatenation of the IV and encrypted value.
+ - Encode the signature (cypher text) as `base64`.
+
+```
+{
+    // Message arguments
+    params: {
+        signature: string   // required, base64 cypher text
+    }
+}
+```
+
+##### Response
+```
+{
+  "status": "Valid"
+}
+```
+
+The `status` can be one of the following values:
+
+ - Valid
+ - InvalidPassword
+ - Deactivated
+ - RequiresApproval
+ - RequiresNewPasswordWithEmailVerification
+ - RequiresNewPassword
+
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 404 | Not Found – There username cannot be found |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/ValidateSignature" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "signature": "QVD3c1vuDNGc7HJa2Oz7p20PDtI6ISx3OMv/RXuTQafm/dNtrtm15Mr42vkeeP2WJN10xsMlUOuzq1G6ZJV+Ur1IHsm8Ddr2qYVZc/9ZFMk="
+  }
+}'
+```
+
 ---
 
 ### Reports
@@ -485,13 +605,14 @@ curl -X "POST" "https://$API_HOST/GetUserActivity" \
 ```
 
 #### Users Activity
-You can use the _GetUsersActivity_ API to retrieve any and all activity that has occurred for any user since the supplied input date/time. This call happens in real-time.
+You can use the _GetUsersActivity_ API to retrieve any and all activity that has occurred for any user since the supplied input date/time. You can also optionally restrict the results to records in a particular state. This call happens in real-time.
 
 ```
 {
     // Message arguments
     params: {
         date: string,       // required, on or after date
+        states: array       // optional, filter results to specified states
     }
 }
 ```
@@ -532,7 +653,8 @@ curl -X "POST" "https://$API_HOST/GetUsersActivity" \
      -u "scope:api_key" \
      -d $'{
   "params": {
-    "date": "2017-01-25T11:44:18.856Z"
+    "date": "2017-01-25T11:44:18.856Z",
+    "states": ["completed", "enrolled"]
   }
 }'
 ```
