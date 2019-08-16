@@ -819,7 +819,7 @@ The CPD APIs enable you to perform CPD management tasks, such as creating, updat
 #### Create a journal
 You can use the _SetJournal_ API to create a CPD journal.
 
-You can specify the attributes to be associated with a CPD journal, including a start date, end date, submission date, and status.
+You can specify the attributes to be associated with a CPD journal, including a start date, end date, submission date, status, target, and target mode.
 
 ```
 {
@@ -835,6 +835,8 @@ You can specify the attributes to be associated with a CPD journal, including a 
        endDate: string,         // required
        submissionDate: string,  // additional attribute
        status: string           // additional attribute
+       target: string           // additional attribute, whole number
+       targetMode: string       // additional attribute
     },
 }
 ```
@@ -878,7 +880,8 @@ curl -X "POST" "https://$API_HOST/SetJournal" \
  "journal": {
    "endDate": "2019-12-31T17:00:00Z",
    "startDate": "2019-01-01T08:00:00Z",
-   "status": "Submitted"
+   "status": "Submitted",
+   "target": "25"
  }
 }'
 ```
@@ -904,7 +907,9 @@ You can use the _GetJournals_ API to retrieve all CPD journals to the passed use
       "startDate": string,
       "endDate": string,
       "submissionDate": string,
-      "status": string
+      "status": string,
+      "target": string,
+      "targetMode": string
     },
     ...
 }
@@ -936,7 +941,7 @@ curl -X "POST" "https://$API_HOST/GetJournals" \
 #### Update a journal
 You can use the _SetJournal_ API to update a CPD journal.
 
-You can specify the attributes to be associated with a CPD journal, including a start date, end date, submission date, and status.
+You can specify the attributes to be associated with a CPD journal, including a start date, end date, submission date, status, target, and target mode.
 
 ```
 {
@@ -953,6 +958,8 @@ You can specify the attributes to be associated with a CPD journal, including a 
        endDate: string,         // required
        submissionDate: string,  // additional attribute
        status: string           // additional attribute
+       target: string           // additional attribute, whole number
+       targetMode: string       // additional attribute
     },
 }
 ```
@@ -997,7 +1004,9 @@ curl -X "POST" "https://$API_HOST/SetJournal" \
  "journal": {
    "endDate": "2019-12-31T17:00:00Z",
    "startDate": "2019-01-01T08:00:00Z",
-   "status": "Accepted"
+   "status": "Accepted",
+   "target": "10",
+   "targetMode": "credits"
  }
 }'
 ```
