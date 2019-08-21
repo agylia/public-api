@@ -638,6 +638,24 @@ You can use the _GetUsersActivity_ API to retrieve any and all activity that has
 }
 ```
 
+For event activities, the activity in the response will also contain a `session` object, for example:
+
+```
+{
+    "activities": [
+    {
+        ...
+        "session": {
+          "start_date": string,
+          "end_date": string,
+          "location": string
+        }
+    },
+    ...
+}
+
+```
+
 ##### Return Codes
 | Code | Meaning |
 |:--|:--|
