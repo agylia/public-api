@@ -302,6 +302,113 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 }'
 ```
 
+#### Read profile fields
+You can use the _GetProfileFields_ API to get the configured user profile fields for your Agylia Administration Portal.
+
+The response from the _GetProfileFields_ API will enable you to determine what mandatory profile fields need to be set prior to using the _SetUser_ API to create or update a user.
+
+##### Response
+```
+{
+  "username": {
+    "label": "Username",
+    "mode": "Mandatory",
+    "order": 0,
+    "type": "Text"
+  },
+  "forename": {
+    "label": "First name",
+    "mode": "Mandatory",
+    "order": 110,
+    "type": "Text"
+  },
+  "surname": {
+    "label": "Surname",
+    "mode": "Mandatory",
+    "order": 120,
+    "type": "Text"
+  },
+  "mail": {
+    "label": "Email address",
+    "mode": "Optional",
+    "order": 130,
+    "type": "Text"
+  },
+  "customDate": {
+    "label": "Custom date",
+    "mode": "AdminOnly",
+    "order": 140,
+    "type": "Date"
+  },
+  "customSingleChoice": {
+    "label": "Custom single choice",
+    "mode": "Mandatory",
+    "order": 150,
+    "type": "SingleChoice",
+    "values":["value1","value2","value3"]
+  },
+  "customMultipleChoice": {
+    "label": "Custom multiple choice",
+    "mode": "Optional",
+    "order": 160,
+    "type": "MultipleChoice",
+    "values":["value1","value2","value3"]
+  },
+  "timezone": {
+    "label": "Time zone",
+    "mode": "AdminOnly",
+    "order": 900,
+    "type": "Text"
+  }
+}
+```
+
+The `mode` can be one of the following values:
+
+ - Mandatory
+ - Optional
+ - AdminOnly
+
+The `type` can be one of the following values:
+
+- Text
+- Date
+- SingleChoice
+- MultipleChoice
+- OU
+
+Given the above response, if you wanted to create a new user via the _SetUser_ API, at minimum you would need to satisfy the `Mandatory` profile fields as follows:
+
+```
+{
+    ...
+
+    // Profile fields
+    profile:{
+       username: string    // required
+       forename: string    // required  
+       surname: string     // required
+       customSingleChoice: string    // required, either value1, value2, or value3           
+    }
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/GetProfileFields" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+```
+
 #### Deactivate a user
 You can use the _SetUser_ API to deactivate a user.
 
