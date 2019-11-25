@@ -936,6 +936,66 @@ curl -X "POST" "https://$API_HOST/EnrolLearner" \
 }'
 ```
 
+#### Award a certification
+You can use the _AwardCertification_ API to award a certification to a user.
+
+You can optional specify the attributes to be associated with the certification, including a score, awarded date, expiry date, and whether the user will receive a notification.
+
+```
+{
+    // Message arguments
+    params: {
+       uid: string,       // required, username
+       ref: string,       // required, certificate identifier
+    },
+
+    // Certification fields
+    certification: {
+       awardMode: string             // additional attribute, default: manual
+       awardedDate: string           // additional attribute
+       expiryDate: string            // additional attribute
+       extensions: object            // additional attribute
+       score: number                 // additional attribute, decimal number
+       suppressNotifications: bool   // additional attribute, default: false
+    },
+}
+```
+
+The optional `awardMode` attribute supports the following values:
+
+ - Manual - use this mode to award an arbitrary certification.
+ - Award -  use this mode to award a certification to a user for the first time.
+ - Renew -  use this mode when renewing a certification previously awarded to a user.
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 404 | Not Found - Their username cannot be found |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/AwardCertification" \
+     -H "Content-Type: application/json" \
+     -u "scope:api_key" \
+     -d $'{
+ "params": {
+   "uid": "example",
+   "ref": "example"
+ },
+ "certification": {
+   "awardedDate": "2019-05-15T17:00:00Z",
+   "score": 85.50,
+   "extensions": {"key1": "value1"}
+ }
+}'
+```
+
 ---
 
 ### Continuing Professional Development (CPD)
