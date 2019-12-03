@@ -939,7 +939,7 @@ curl -X "POST" "https://$API_HOST/EnrolLearner" \
 #### Award a certification
 You can use the _AwardCertification_ API to award a certification to a user.
 
-You can optional specify the attributes to be associated with the certification, including a score, awarded date, expiry date, and whether the user will receive a notification.
+You can optionally specify the attributes to be associated with the certification, including a score, awarded date, expiry date, and whether the user will receive a notification that includes a copy of their PDF certificate. You can optionally supply additional placeholder parameter values by passing a set of key/value pairs via the `extensions` attribute.
 
 ```
 {
@@ -964,7 +964,7 @@ You can optional specify the attributes to be associated with the certification,
 The optional `awardMode` attribute supports the following values:
 
  - Manual - use this mode to award an arbitrary certification.
- - Award -  use this mode to award a certification to a user for the first time.
+ - Award -  use this mode to award a certification to a user for the first time, and where you wish to use Agylia's certification renewal features.
  - Renew -  use this mode when renewing a certification previously awarded to a user.
 
 ##### Return Codes
