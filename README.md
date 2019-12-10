@@ -936,8 +936,8 @@ curl -X "POST" "https://$API_HOST/EnrolLearner" \
 }'
 ```
 
-#### Award a certification
-You can use the _AwardCertification_ API to award a certification to a user.
+#### Award a certificate
+You can use the _AwardCertificate_ API to award a certification to a user.
 
 You can optionally specify the attributes to be associated with the certification, including a score, awarded date, expiry date, and whether the user will receive a notification that includes a copy of their PDF certificate. You can optionally supply additional placeholder parameter values by passing a set of key/value pairs via the `extensions` attribute.
 
@@ -980,7 +980,7 @@ The optional `awardMode` attribute supports the following values:
 
 ##### Example
 ```
-curl -X "POST" "https://$API_HOST/AwardCertification" \
+curl -X "POST" "https://$API_HOST/AwardCertificate" \
      -H "Content-Type: application/json" \
      -u "scope:api_key" \
      -d $'{
