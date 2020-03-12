@@ -43,6 +43,8 @@ Create requests typically do not happen in real-time. After the request has been
 
 You can use the `send_welcome` parameter to enable the sending of a welcome email message for new user accounts. The default is to suppress the sending of welcome emails.
 
+You can also use the `override_mandatory_check` parameter to create a user with an incomplete profile. The `username`, `forename`, and `surname` fields are still required, but any custom mandatory fields you may have configured can be omitted. 
+
 If the user exists and the create action is specified then the service will return a `409`.
 
 ```
@@ -53,6 +55,7 @@ If the user exists and the create action is specified then the service will retu
         callback: url      // optional, default: nil
         auth_mode: string  // optional, values should be either: sso or forms
         send_welcome: bool // optional, default: false
+        override_mandatory_check: bool  // optional, default: false
     },
 
     // Profile fields
