@@ -43,7 +43,7 @@ Create requests typically do not happen in real-time. After the request has been
 
 You can use the `send_welcome` parameter to enable the sending of a welcome email message for new user accounts. The default is to suppress the sending of welcome emails.
 
-You can also use the `override_mandatory_check` parameter to create a user with an incomplete profile. The `username`, `forename`, and `surname` fields are still required, but any custom mandatory fields you may have configured can be omitted. 
+You can also use the `override_mandatory_check` parameter to create a user with an incomplete profile. The `username`, `forename`, and `surname` fields are still required, but any custom mandatory fields you may have configured can be omitted.
 
 If the user exists and the create action is specified then the service will return a `409`.
 
@@ -929,6 +929,46 @@ You can use the _EnrolLearner_ API to enrol a user on a content item i.e. a cata
 ##### Example
 ```
 curl -X "POST" "https://$API_HOST/EnrolLearner" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "uid": "example",
+    "ref": "example"
+  }
+}'
+```
+
+#### Unenrol Learner
+
+You can use the _UnenrolLearner_ API to unenrol a user from a content item i.e. a catalogue item or a session.
+
+```
+{
+    // Message arguments
+    params: {
+        uid: string,       // required, username
+        ref: string,       // required, content item external reference
+    },
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 400 | Bad Request – The user is not targeted to the content item |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 404 | Not Found – The username cannot be found |
+| 404 | Not Found – The content item cannot be found |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/UnenrolLearner" \
      -H "Content-Type: application/json; charset=utf-8" \
      -u "scope:api_key" \
      -d $'{
