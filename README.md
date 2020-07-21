@@ -685,9 +685,57 @@ This API supports paging. You can specify a starting index, and the number of it
     {
         "date": string,
         "ref": string,
+        "external_ref": null | string,
         "score": null | number,
         "status": string,
-        "title": string
+        "title": string,
+        "friendly_type": string
+    },
+    ...
+}
+```
+
+The `friendly_type` attribute supports the following values:
+
+ - course
+ - file
+ - link
+ - curriculum
+ - event
+ - task
+ - cpd_journal
+ - cpd_entry
+ - independent
+
+
+For event activities, the activity in the response will also contain a `session` object, for example:
+
+```
+{
+    "activities": [
+    {
+        ...
+        "session": {
+          "start_date": string,
+          "end_date": string,
+          "location": string
+        }
+    },
+    ...
+}
+```
+
+For activities that have Continuing Professional Development (CPD) configured, the response will also contain a `cpd` object, for example:
+
+```
+{
+    "activities": [
+    {
+        ...
+        "cpd": {
+          "points": number,
+          "learning_hours": number
+        }
     },
     ...
 }
@@ -742,11 +790,25 @@ You can use the _GetUsersActivity_ API to retrieve any and all activity that has
         "status": string,
         "title": string,
         "type": string,
+        "friendly_type": string,
         "username": string
     },
     ...
 }
 ```
+
+The `friendly_type` attribute supports the following values:
+
+ - course
+ - file
+ - link
+ - curriculum
+ - event
+ - task
+ - cpd_journal
+ - cpd_entry
+ - independent
+
 
 For event activities, the activity in the response will also contain a `session` object, for example:
 
@@ -764,6 +826,22 @@ For event activities, the activity in the response will also contain a `session`
     ...
 }
 
+```
+
+For activities that have Continuing Professional Development (CPD) configured, the response will also contain a `cpd` object, for example:
+
+```
+{
+    "activities": [
+    {
+        ...
+        "cpd": {
+          "points": number,
+          "learning_hours": number
+        }
+    },
+    ...
+}
 ```
 
 ##### Return Codes
