@@ -1,28 +1,28 @@
 // dependencies
 
-const crypto      = require('crypto');
-const superagent  = require('superagent');
+const crypto = require('crypto');
+const superagent = require('superagent');
 
 
 // globals
 
-const API_ROUTE     = "https://api.portal-agylia.com/ValidateSignature";
-const API_USERNAME  = "example.admin-agylia.com";
-const API_KEY       = "7c82041e63db436eb0a681d6910d71aedf32656ef23";
+const API_ROUTE = "https://api.portal-agylia.com/ValidateSignature";
+const API_USERNAME = "<your username>";
+const API_KEY = "<your API key>";
 const USER_USERNAME = "testuser";
 const USER_PASSWORD = "testpassword";
 
 
 // helpers
 
-function buildSignature (apiKey, username, password){
-  const key     = crypto.createHash('md5').update(apiKey).digest('hex');
-  const iv      = crypto.randomBytes(16);
-  const cipher  = crypto.createCipheriv('aes-256-cbc', key, iv);
+function buildSignature(apiKey, username, password) {
+  const key = crypto.createHash('md5').update(apiKey).digest('hex');
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
 
   const rawData = ":u:" + username + ":p:" + password + ":t:" + new Date().toISOString();
   const encryptedData = cipher.update(rawData);
-  const cipherText    = Buffer.concat([encryptedData, cipher.final()]);
+  const cipherText = Buffer.concat([encryptedData, cipher.final()]);
 
   return Buffer.concat([iv, cipherText]).toString('base64')
 }

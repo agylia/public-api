@@ -683,15 +683,17 @@ This API supports paging. You can specify a starting index, and the number of it
 {
     "activities": [
     {
-        "date": string,
+        "occurred_date": string,
+        "stored_date": string,
         "ref": string,
         "external_ref": null | string,
         "score": null | number,
         "status": string,
         "title": string,
         "friendly_type": string
-    },
-    ...
+    }, {
+      ...
+    }]
 }
 ```
 
@@ -740,6 +742,8 @@ For activities that have Continuing Professional Development (CPD) configured, t
     ...
 }
 ```
+
+> **Deprecation notice**  The `date` response property will be deprecated in favour of the new `occurred_date` response property.
 
 ##### Return Codes
 | Code | Meaning |
@@ -765,14 +769,16 @@ curl -X "POST" "https://$API_HOST/GetUserActivity" \
 ```
 
 #### Users Activity
-You can use the _GetUsersActivity_ API to retrieve any and all activity that has occurred for any user since the supplied input date/time. You can also optionally restrict the results to records in a particular state. This call happens in real-time.
+You can use the _GetUsersActivity_ API to retrieve any and all activity that has occurred for any user since the supplied input date/time. You can also optionally restrict the results to records in a particular state. The number of activities returned is limited to `500`, and if you wish get more activities you should make additional requests using the `next_cursor` property from the previous response. This call happens in real-time.
 
 ```
 {
     // Message arguments
     params: {
-        date: string,       // required, on or after date
-        states: array       // optional, filter results to specified states
+        from_date: string,  // required, on or after date
+        to_date: string,    // optional, before date
+        states: array,      // optional, filter results to specified states
+        cursor: string      // optional, cursor to get next batch of results
     }
 }
 ```
@@ -782,8 +788,8 @@ You can use the _GetUsersActivity_ API to retrieve any and all activity that has
 {
     "activities": [
     {
-        "completed_date": string,
-        "date": string,
+        "occurred_date": string,
+        "stored_date": string,
         "external_ref": string,
         "ref": string,
         "score": null | number,
@@ -792,8 +798,10 @@ You can use the _GetUsersActivity_ API to retrieve any and all activity that has
         "type": string,
         "friendly_type": string,
         "username": string
-    },
-    ...
+    }, {
+      ...
+    }],
+    "next_cursor": string, null if no more results available
 }
 ```
 
@@ -839,10 +847,12 @@ For activities that have Continuing Professional Development (CPD) configured, t
           "points": number,
           "learning_hours": number
         }
-    },
+    }
     ...
 }
 ```
+
+> **Deprecation notice** The `params.date` request property and the `date` and `completed_date` response properties will be deprecated in favour of the new `params.from_date` request property, and the `occurred_date` response property respectively.
 
 ##### Return Codes
 | Code | Meaning |
@@ -861,7 +871,7 @@ curl -X "POST" "https://$API_HOST/GetUsersActivity" \
      -u "scope:api_key" \
      -d $'{
   "params": {
-    "date": "2017-01-25T11:44:18.856Z",
+    "from_date": "2017-01-25T11:44:18.856Z",
     "states": ["completed", "enrolled"]
   }
 }'
