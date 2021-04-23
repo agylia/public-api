@@ -1326,3 +1326,56 @@ curl -X "POST" "https://$API_HOST/SetJournal" \
  }
 }'
 ```
+---
+
+### Learning Record Store (LRS)
+
+The LRS APIs enable you to perform LRS management tasks. Currently this is limited to just retrieving a user's LRS configuration so you can communicate directly with the LRS.
+
+#### Get LRS configuration
+
+You can use the _GetLrsConfig_ API to retrieve the LRS configuration for a user.
+
+```
+{
+    // Message arguments
+    params: {
+        uid: string    // required, username
+    }
+}
+```
+
+##### Response
+
+```
+{
+  "agent": string,
+  "authToken": string,
+  "endpoint": string
+}
+```
+
+##### Return Codes
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found - Their username cannot be found                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+
+```
+curl -X "POST" "https://$API_HOST/GetLrsConfig" \
+     -H "Content-Type: application/json" \
+     -u "scope:api_key" \
+     -d $'{
+ "params": {
+   "uid": "example"
+ }
+}'
+```
