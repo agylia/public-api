@@ -877,6 +877,61 @@ curl -X "POST" "https://$API_HOST/GetUsersActivity" \
 }'
 ```
 
+#### Users Certificates
+You can use the _GetUsersCertificates_ API to retrieve any and all certificates that have been awarded for any user since the supplied input date/time. The number of certificates returned is limited to `500`, and if you wish get more certificates you should make additional requests using the `next_cursor` property from the previous response. This call happens in real-time.
+
+```
+{
+    // Message arguments
+    params: {
+        from_date: string,  // required, on or after date
+        to_date: string,    // optional, before date
+        cursor: string      // optional, cursor to get next batch of results
+    }
+}
+```
+
+##### Response
+```
+{
+    "certificates": [
+    {
+        "awared_date": string,
+        "certificate_title": null | string,
+        "certification_id": string,
+        "certification_title": string,
+        "score": null | number,
+        "expiration_date": null | string,
+        "username": string
+    }, {
+      ...
+    }],
+    "next_cursor": string, null if no more results available
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/GetUsersCertificates" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "from_date": "2022-11-24T00:00:00.000Z"
+  }
+}'
+```
+
 ---
 
 ### Catalogue
