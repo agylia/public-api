@@ -1,24 +1,25 @@
-# Agylia API Reference
+# Civica Learning API Reference
 ## Overview
 ### API Base URL
 The base url for the API is:
 
- - For EU customers `https://api.portal-agylia.com`
- - For US customers `https://api.portal-agylia.com/us`
+ - For UK customers `https://api.civica-learning.com`
+ - For EU customers `https://api.civica-learning.com/eu`
+ - For US customers `https://api.civica-learning.com/us`
 
 All calls to the API must be made by using HTTPS.
 
 ### Authentication
-Authentication uses Basic Authentication over SSL/HTTPS. Your user name is the full domain name for your Agylia Administration Portal e.g. `example.admin-agylia.com`. Your password is your API key e.g. `7c82041e63db436eb0a681d6910d71aedf32656ef23`.
+Authentication uses Basic Authentication over SSL/HTTPS. Your user name is the full domain name for your Civica Learning Administration Portal e.g. `example.learning-admin.com`. Your password is your API key e.g. `7c82041e63db436eb0a681d6910d71aedf32656ef23`.
 
-You can find your API key in the Agylia Administration Portal by logging in, and then clicking _Settings_ -> _Advanced_.
+You can find your API key in the Civica Learning Administration Portal by logging in, and then clicking _Settings_ -> _Advanced_.
 
 ### Request Style
 All APIs support an informal RPC style. Our informal RPC style is to `POST` a message to a named URL, where the payload contains the message data e.g.
 
 ```
 POST /GetUser HTTP/1.1
-Host: api.portal-agylia.com
+Host: api.civica-learning.com
 Content-Type: application/json
 
 {
@@ -126,7 +127,7 @@ curl -X "POST" "https://$API_HOST/SetUser" \
      -d $'{
   "params": {
     "action": "create",
-    "callback": "https://example.com/agylia-callback/"
+    "callback": "https://example.com/civica-learning-callback/"
   },
   "profile": {
     "username": "example"
@@ -306,7 +307,7 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 ```
 
 #### Read profile fields
-You can use the _GetProfileFields_ API to get the configured user profile fields for your Agylia Administration Portal.
+You can use the _GetProfileFields_ API to get the configured user profile fields for your Civica Learning Administration Portal.
 
 The response from the _GetProfileFields_ API will enable you to determine what mandatory profile fields need to be set prior to using the _SetUser_ API to create or update a user.
 
@@ -1150,7 +1151,7 @@ You can optionally specify the attributes to be associated with the certificatio
 The optional `awardMode` attribute supports the following values:
 
  - Manual - use this mode to award an arbitrary certification.
- - Award -  use this mode to award a certification to a user for the first time, and where you wish to use Agylia's certification renewal features.
+ - Award -  use this mode to award a certification to a user for the first time, and where you wish to use Civica Learning's certification renewal features.
  - Renew -  use this mode when renewing a certification previously awarded to a user.
 
 ##### Return Codes
