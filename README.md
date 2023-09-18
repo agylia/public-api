@@ -1123,6 +1123,48 @@ curl -X "POST" "https://$API_HOST/UnenrolLearner" \
 }'
 ```
 
+#### Set Content Complete
+
+You can use the _SetContentComplete_ API to mark a learner as complete for a catalogue item.
+
+```
+{
+    // Message arguments
+    params: {
+        uid: string,       // required, username
+        ref: string,       // required, content item external reference
+    },
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 400 | Bad Request – The user is not targeted to the content item |
+| 400 | Bad Request – There are no seats available on the session |
+| 400 | Bad Request - Content not targeted |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 404 | Not Found – The username cannot be found |
+| 404 | Not Found – The content item cannot be found |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/SetContentComplete" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "uid": "example",
+    "ref": "example"
+  }
+}'
+```
+
 #### Award a certificate
 You can use the _AwardCertificate_ API to award a certification to a user.
 
