@@ -67,7 +67,7 @@ If the user exists and the create action is specified then the service will retu
 
     // Password information
     password: {
-       value: string       // required
+       value: string       // optional
     },
 
     // Groups information
