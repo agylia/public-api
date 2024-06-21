@@ -254,6 +254,68 @@ curl -X "POST" "https://$API_HOST/GetModifiedUsers" \
 }'
 ```
 
+#### Read inactive users
+You can use the _GetInactiveUsers_ API to retrieve any user records for users who have  
+not logged in since the supplied input date/time, or who have never logged in. This call happens in real-time.
+
+```
+{
+    // Message arguments
+    params: {
+        date: string,       // required, before date
+        cursor: string      // optional, the 'next_cursor' value from previous request
+    }
+}
+```
+
+This API will return a maximum of _500_ user records per request. You can use the cursor property
+to page through all your inactive users.
+
+##### Response
+```
+{
+  "users": [
+  {
+    "groups":[{
+      "name": string
+    }],
+    "params": {
+      "uid": string
+    },
+    "profile": {
+      "forename": string,
+      "mail": string,
+      ...
+    }
+  },
+  ...
+  ]
+  "next_cursor":string
+}
+```
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 200 | OK — Your request completed successfully |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/GetInactiveUsers" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "date": "2017-01-25T11:44:18.856Z"
+  }
+}'
+```
+
 #### Update a user
 You can use the _SetUser_ API to update a user.
 
