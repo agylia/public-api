@@ -35,12 +35,55 @@ Content-Type: application/json
 ### Users
 The user APIs enable you perform user management tasks, such as creating, updating and removing users, as well as updating user group membership.
 
+The _SetUser_ and _SetUsers_ APIs described in this document operate asynchronously, meaning after your request message has been validated the API will return a `202 Accepted`, and further processing of your request will continue.
+
+When you receive a `202 Accepted` response, a `Location` header is also returned with the response. This header contains a relative route and a transition ID. If you supply a `callback` URL in the request you'll receive a status update when the message has been processed. However, you can also query the status of you request by calling the status route, appending the `Location` header value:
+
+```
+202 Accepted
+Location: /status/123
+...
+```
+
+Given the above response, here is an example to get the status of the request:
+
+```
+curl "https://$API_HOST/status/123" \
+     -u "scope:api_key"
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{"message":"example","status":2,"tid":"123","errors":{}}
+```
+
+The `status` field contains the status of the request:
+
+| Status | Meaning |
+|:--|:--|
+| 0 | Status unknown |
+| 1 | Status pending, request processing not started |
+| 2 | Status success, completed successfully |
+| 3 | Status failed, completed with an error |
+
+If the request fails, the `message` field in the response typically contains a summary of the error that occurred. The `errors` field will contain further details, for example:
+
+```
+{
+  ...
+  "status":3,
+  "errors":{
+     "example1":"unknown user"
+  }
+}
+```
+
 #### Create a user
 You can use the _SetUser_ API to create or update a user.
 
 You can specify the attributes to be associated with a user, including group and OU memberships. When creating users you can also specify the password for the user. If you add a user to a group that does not yet exist, the API will create the group for you.
 
-Create requests typically do not happen in real-time. After the request has been validated and accepted the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request.
+Create requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request, or you can request the `/status/123` route returned in the `Location` header to retrieve processing status.
 
 You can use the `send_welcome` parameter to enable the sending of a welcome email message for new user accounts. The default is to suppress the sending of welcome emails.
 
@@ -86,37 +129,6 @@ If the user exists and the create action is specified then the service will retu
 | 403 | Forbidden – Your credentials are not valid |
 | 429 | Too Many Requests - Rate limiting |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
-
-When you receive a `202 Accepted` response, a `Location` header is also returned with the response. This header contains a relative route and a transition ID. If you supply a `callback` URL in the request you'll receive a status update when the message has been processed. However, you can also query the status of you request by calling the status route, appending the `Location` header value:
-
-```
-202 Accepted
-Location: /status/123
-...
-```
-
-Given the above response, here is an example to get the status of the request:
-
-```
-curl "https://$API_HOST/status/123" \
-     -u "scope:api_key"
-
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{"message":"example","status":2,"tid":"123"}
-```
-
-The `status` field contains the status of the request:
-
-| Status | Meaning |
-|:--|:--|
-| 0 | Status unknown |
-| 1 | Status pending, request processing not started |
-| 2 | Status success, completed successfully |
-| 3 | Status failed, completed with an error |
-
-If the request fails, the `message` field in the response typically holds the error that occurred.
 
 ##### Example
 ```
@@ -321,7 +333,7 @@ You can use the _SetUser_ API to update a user.
 
 You can specify the attributes to be associated with a user, including group and OU memberships. This API uses merge semantics. If you add a user to a group that does not yet exist the API will create the group for you.
 
-Update requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request.
+Update requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request, or you can request the `/status/123` route returned in the `Location` header to retrieve processing status.
 
 If the user does not exist the service will return a `404`.
 
@@ -478,7 +490,7 @@ curl -X "POST" "https://$API_HOST/GetProfileFields" \
 #### Deactivate a user
 You can use the _SetUser_ API to deactivate a user.
 
-Deactivate requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request.
+Deactivate requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request, or you can request the `/status/123` route returned in the `Location` header to retrieve processing status.
 
 If the user does not exist the service will return a `404`.
 
@@ -520,7 +532,7 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 #### Activate a user
 You can use the _SetUser_ API to activate a user.
 
-Activate requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request.
+Activate requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request, or you can request the `/status/123` route returned in the `Location` header to retrieve processing status.
 
 If the user does not exist the service will return a `404`.
 
@@ -554,6 +566,92 @@ curl -X "POST" "https://$API_HOST/SetUser" \
      -d $'{
   "params": {
     "uid": "example",
+    "action": "activate"
+  }
+}'
+```
+
+#### Deactivate multiple users
+You can use the _SetUsers_ API to deactivate multiple users in a single request.
+
+Deactivate requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request, or you can request the `/status/123` route returned in the `Location` header to retrieve processing status.
+
+```
+{
+    // Message arguments
+    params: {
+        action: deactivate,
+        uids: array,       // required, one or more usernames
+        callback: url      // optional, default nil
+    }
+}
+```
+
+The _SetUsers_ API has a limit of **500** on the number of `uids` you can specify in a single request. If you exceed this limit the API will return a `400 Bad request`. 
+
+If any of the users you specify do not exist, the `errors` field  in the `/status/123` response will list these.
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 202 | Accepted — Your request has been accepted |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/SetUsers" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "uids": ["example1", "example2"],
+    "action": "deactivate"
+  }
+}'
+```
+
+#### Activate multiple users
+You can use the _SetUsers_ API to activate multiple users in a single request.
+
+Activate requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request, or you can request the `/status/123` route returned in the `Location` header to retrieve processing status.
+
+```
+{
+    // Message arguments
+    params: {
+        action: activate,
+        uids: array,       // required, one or more usernames
+        callback: url      // optional, default nil
+    }
+}
+```
+
+The _SetUsers_ API has a limit of **500** on the number of `uids` you can specify in a single request. If you exceed this limit the API will return a `400 Bad request`. 
+
+If any of the users you specify do not exist, the `errors` field  in the `/status/123` response will list these.
+
+##### Return Codes
+| Code | Meaning |
+|:--|:--|
+| 202 | Accepted — Your request has been accepted |
+| 400 | Bad Request – Your request has an incorrect parameter |
+| 401 | Unauthorized – Your credentials are missing |
+| 403 | Forbidden – Your credentials are not valid |
+| 429 | Too Many Requests - Rate limiting |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+```
+curl -X "POST" "https://$API_HOST/SetUsers" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "uids": ["example1", "example2"],
     "action": "activate"
   }
 }'
