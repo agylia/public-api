@@ -6,6 +6,7 @@ The base url for the API is:
  - For UK customers `https://api.civica-learning.com`
  - For EU customers `https://api.civica-learning.com/eu`
  - For US customers `https://api.civica-learning.com/us`
+ - For Canadian customers `https://api.civica-learning.com/ca`
 
 All calls to the API must be made by using HTTPS.
 
