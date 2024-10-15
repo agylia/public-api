@@ -1,21 +1,26 @@
 # Civica Learning API Reference
+
 ## Overview
+
 ### API Base URL
+
 The base url for the API is:
 
- - For UK customers `https://api.civica-learning.com`
- - For EU customers `https://api.civica-learning.com/eu`
- - For US customers `https://api.civica-learning.com/us`
- - For Canadian customers `https://api.civica-learning.com/ca`
+- For UK customers `https://api.civica-learning.com`
+- For EU customers `https://api.civica-learning.com/eu`
+- For US customers `https://api.civica-learning.com/us`
+- For Canadian customers `https://api.civica-learning.com/ca`
 
 All calls to the API must be made by using HTTPS.
 
 ### Authentication
+
 Authentication uses Basic Authentication over SSL/HTTPS. Your user name is the full domain name for your Civica Learning Administration Portal e.g. `example.learning-admin.com`. Your password is your API key e.g. `7c82041e63db436eb0a681d6910d71aedf32656ef23`.
 
 You can find your API key in the Civica Learning Administration Portal by logging in, and then clicking _Settings_ -> _Advanced_.
 
 ### Request Style
+
 All APIs support an informal RPC style. Our informal RPC style is to `POST` a message to a named URL, where the payload contains the message data e.g.
 
 ```
@@ -33,7 +38,9 @@ Content-Type: application/json
 ---
 
 ## APIs
+
 ### Users
+
 The user APIs enable you perform user management tasks, such as creating, updating and removing users, as well as updating user group membership.
 
 The _SetUser_ and _SetUsers_ APIs described in this document operate asynchronously, meaning after your request message has been validated the API will return a `202 Accepted`, and further processing of your request will continue.
@@ -60,12 +67,12 @@ Content-Type: application/json
 
 The `status` field contains the status of the request:
 
-| Status | Meaning |
-|:--|:--|
-| 0 | Status unknown |
-| 1 | Status pending, request processing not started |
-| 2 | Status success, completed successfully |
-| 3 | Status failed, completed with an error |
+| Status | Meaning                                        |
+| :----- | :--------------------------------------------- |
+| 0      | Status unknown                                 |
+| 1      | Status pending, request processing not started |
+| 2      | Status success, completed successfully         |
+| 3      | Status failed, completed with an error         |
 
 If the request fails, the `message` field in the response typically contains a summary of the error that occurred. The `errors` field will contain further details, for example:
 
@@ -80,6 +87,7 @@ If the request fails, the `message` field in the response typically contains a s
 ```
 
 #### Create a user
+
 You can use the _SetUser_ API to create or update a user.
 
 You can specify the attributes to be associated with a user, including group and OU memberships. When creating users you can also specify the password for the user. If you add a user to a group that does not yet exist, the API will create the group for you.
@@ -122,16 +130,18 @@ If the user exists and the create action is specified then the service will retu
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 202 | Accepted — Your request has been accepted |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 202   | Accepted — Your request has been accepted                                              |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 // SetUser (create)
 curl -X "POST" "https://$API_HOST/SetUser" \
@@ -160,6 +170,7 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 ```
 
 #### Read a user
+
 You can use the _GetUser_ API to read a user. This call returns all the profile fields and group memberships for a user. This call happens in real-time.
 
 ```
@@ -172,6 +183,7 @@ You can use the _GetUser_ API to read a user. This call returns all the profile 
 ```
 
 ##### Response
+
 ```
 {
     "groups":[{
@@ -189,17 +201,19 @@ You can use the _GetUser_ API to read a user. This call returns all the profile 
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 409 | Conflict – The username is already in use |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 409   | Conflict – The username is already in use                                              |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/GetUser" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -212,6 +226,7 @@ curl -X "POST" "https://$API_HOST/GetUser" \
 ```
 
 #### Read modified users
+
 You can use the _GetModifiedUsers_ API to retrieve any user records that have been
 created or updated since the supplied input date/time. This call happens in real-time.
 
@@ -225,6 +240,7 @@ created or updated since the supplied input date/time. This call happens in real
 ```
 
 ##### Response
+
 ```
 {
   "users": [
@@ -246,16 +262,18 @@ created or updated since the supplied input date/time. This call happens in real
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/GetModifiedUsers" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -268,7 +286,8 @@ curl -X "POST" "https://$API_HOST/GetModifiedUsers" \
 ```
 
 #### Read inactive users
-You can use the _GetInactiveUsers_ API to retrieve any user records for users who have  
+
+You can use the _GetInactiveUsers_ API to retrieve any user records for users who have
 not logged in since the supplied input date/time, or who have never logged in. This call happens in real-time.
 
 ```
@@ -285,6 +304,7 @@ This API will return a maximum of _500_ user records per request. You can use th
 to page through all your inactive users.
 
 ##### Response
+
 ```
 {
   "users": [
@@ -308,16 +328,18 @@ to page through all your inactive users.
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/GetInactiveUsers" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -330,6 +352,7 @@ curl -X "POST" "https://$API_HOST/GetInactiveUsers" \
 ```
 
 #### Update a user
+
 You can use the _SetUser_ API to update a user.
 
 You can specify the attributes to be associated with a user, including group and OU memberships. This API uses merge semantics. If you add a user to a group that does not yet exist the API will create the group for you.
@@ -355,17 +378,19 @@ If the user does not exist the service will return a `404`.
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 202 | Accepted — Your request has been accepted |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 404 | Not Found – There username cannot be found |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 202   | Accepted — Your request has been accepted                                              |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found – There username cannot be found                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/SetUser" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -382,11 +407,13 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 ```
 
 #### Read profile fields
+
 You can use the _GetProfileFields_ API to get the configured user profile fields for your Civica Learning Administration Portal.
 
 The response from the _GetProfileFields_ API will enable you to determine what mandatory profile fields need to be set prior to using the _SetUser_ API to create or update a user.
 
 ##### Response
+
 ```
 {
   "username": {
@@ -444,9 +471,9 @@ The response from the _GetProfileFields_ API will enable you to determine what m
 
 The `mode` can be one of the following values:
 
- - Mandatory
- - Optional
- - AdminOnly
+- Mandatory
+- Optional
+- AdminOnly
 
 The `type` can be one of the following values:
 
@@ -465,23 +492,25 @@ Given the above response, if you wanted to create a new user via the _SetUser_ A
     // Profile fields
     profile:{
        username: string    // required
-       forename: string    // required  
+       forename: string    // required
        surname: string     // required
-       customSingleChoice: string    // required, either value1, value2, or value3           
+       customSingleChoice: string    // required, either value1, value2, or value3
     }
 }
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/GetProfileFields" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -489,6 +518,7 @@ curl -X "POST" "https://$API_HOST/GetProfileFields" \
 ```
 
 #### Deactivate a user
+
 You can use the _SetUser_ API to deactivate a user.
 
 Deactivate requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request, or you can request the `/status/123` route returned in the `Location` header to retrieve processing status.
@@ -507,17 +537,19 @@ If the user does not exist the service will return a `404`.
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 202 | Accepted — Your request has been accepted |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 404 | Not Found – There username cannot be found |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 202   | Accepted — Your request has been accepted                                              |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found – There username cannot be found                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/SetUser" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -531,6 +563,7 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 ```
 
 #### Activate a user
+
 You can use the _SetUser_ API to activate a user.
 
 Activate requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request, or you can request the `/status/123` route returned in the `Location` header to retrieve processing status.
@@ -549,17 +582,19 @@ If the user does not exist the service will return a `404`.
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 202 | Accepted — Your request has been accepted |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 404 | Not Found – There username cannot be found |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 202   | Accepted — Your request has been accepted                                              |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found – There username cannot be found                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/SetUser" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -573,6 +608,7 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 ```
 
 #### Deactivate multiple users
+
 You can use the _SetUsers_ API to deactivate multiple users in a single request.
 
 Deactivate requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request, or you can request the `/status/123` route returned in the `Location` header to retrieve processing status.
@@ -588,21 +624,23 @@ Deactivate requests typically do not happen in real-time. After the request has 
 }
 ```
 
-The _SetUsers_ API has a limit of **500** on the number of `uids` you can specify in a single request. If you exceed this limit the API will return a `400 Bad request`. 
+The _SetUsers_ API has a limit of **500** on the number of `uids` you can specify in a single request. If you exceed this limit the API will return a `400 Bad request`.
 
-If any of the users you specify do not exist, the `errors` field  in the `/status/123` response will list these.
+If any of the users you specify do not exist, the `errors` field in the `/status/123` response will list these.
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 202 | Accepted — Your request has been accepted |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 202   | Accepted — Your request has been accepted                                              |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/SetUsers" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -616,6 +654,7 @@ curl -X "POST" "https://$API_HOST/SetUsers" \
 ```
 
 #### Activate multiple users
+
 You can use the _SetUsers_ API to activate multiple users in a single request.
 
 Activate requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`. With this in mind you can specify a callback address, which the service will attempt to call upon completion of the request, or you can request the `/status/123` route returned in the `Location` header to retrieve processing status.
@@ -631,21 +670,23 @@ Activate requests typically do not happen in real-time. After the request has be
 }
 ```
 
-The _SetUsers_ API has a limit of **500** on the number of `uids` you can specify in a single request. If you exceed this limit the API will return a `400 Bad request`. 
+The _SetUsers_ API has a limit of **500** on the number of `uids` you can specify in a single request. If you exceed this limit the API will return a `400 Bad request`.
 
-If any of the users you specify do not exist, the `errors` field  in the `/status/123` response will list these.
+If any of the users you specify do not exist, the `errors` field in the `/status/123` response will list these.
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 202 | Accepted — Your request has been accepted |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 202   | Accepted — Your request has been accepted                                              |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/SetUsers" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -659,6 +700,7 @@ curl -X "POST" "https://$API_HOST/SetUsers" \
 ```
 
 #### Remove a user
+
 You can use the _DeleteUser_ API to remove a user. This call will remove all the user properties from the system including all group memberships. This call happens in real-time.
 
 If the user does not exist the service will return a `404`.
@@ -673,17 +715,19 @@ If the user does not exist the service will return a `404`.
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 404 | Not Found – There username cannot be found |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found – There username cannot be found                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/DeleteUser" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -696,6 +740,7 @@ curl -X "POST" "https://$API_HOST/DeleteUser" \
 ```
 
 #### Add and remove a user from a group
+
 You can use the _SetUser_ API to update the group memberships for a user.
 
 If you add a user to a group that does not yet exist, the API will create the group for you.
@@ -722,16 +767,18 @@ If the user does not exist the service returns a `404`.
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 202 | Accepted — Your request has been accepted |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 202   | Accepted — Your request has been accepted                                              |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/SetUser" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -754,6 +801,7 @@ curl -X "POST" "https://$API_HOST/SetUser" \
 ```
 
 #### Validate user credentials
+
 You can use the _ValidateSignature_ API to validate the username and password
 for a non SSO user account.
 
@@ -761,14 +809,14 @@ To do this you need to supply an encrypted signature that contains the username,
 
 To generate a valid signature you must:
 
- - Use a valid UTC ISO date as the timestamp.
- - Build a string containing the username, password, and the timestamp with the
- `:u:`, `:p:`, and `:t:` separators.
- - Encrypt the string with the `aes-256-cbc` symmetric algorithm as follows:
-   - The encryption key should be an `md5` hash of your API key.
-   - The Initialization Vector (IV) should be a random `16` byte value.
-   - The final cypher text should be a concatenation of the IV and encrypted value.
- - Encode the signature (cypher text) as `base64`.
+- Use a valid UTC ISO date as the timestamp.
+- Build a string containing the username, password, and the timestamp with the
+  `:u:`, `:p:`, and `:t:` separators.
+- Encrypt the string with the `aes-256-cbc` symmetric algorithm as follows:
+  - The encryption key should be an `md5` hash of your API key.
+  - The Initialization Vector (IV) should be a random `16` byte value.
+  - The final cypher text should be a concatenation of the IV and encrypted value.
+- Encode the signature (cypher text) as `base64`.
 
 ```
 {
@@ -780,6 +828,7 @@ To generate a valid signature you must:
 ```
 
 ##### Response
+
 ```
 {
   "status": "Valid"
@@ -788,26 +837,27 @@ To generate a valid signature you must:
 
 The `status` can be one of the following values:
 
- - Valid
- - InvalidPassword
- - Deactivated
- - RequiresApproval
- - RequiresNewPasswordWithEmailVerification
- - RequiresNewPassword
-
+- Valid
+- InvalidPassword
+- Deactivated
+- RequiresApproval
+- RequiresNewPasswordWithEmailVerification
+- RequiresNewPassword
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 404 | Not Found – There username cannot be found |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found – There username cannot be found                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/ValidateSignature" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -822,9 +872,11 @@ curl -X "POST" "https://$API_HOST/ValidateSignature" \
 ---
 
 ### Reports
+
 The reports APIs enable you to get activity reports for your users, or an individual user. All APIs support only the RPC style at this time.
 
 #### User Activity
+
 You can use the _GetUserActivity_ API to retrieve the activity history for a specified user. This includes any content/items that are in-progress or completed. User activity is returned for all content types including courses, curricula, files, events, weblinks, tasks and independent learning activies. This call happens in real-time.
 
 This API supports paging. You can specify a starting index, and the number of items to return per page.
@@ -841,6 +893,7 @@ This API supports paging. You can specify a starting index, and the number of it
 ```
 
 ##### Response
+
 ```
 {
     "activities": [
@@ -861,16 +914,15 @@ This API supports paging. You can specify a starting index, and the number of it
 
 The `friendly_type` attribute supports the following values:
 
- - course
- - file
- - link
- - curriculum
- - event
- - task
- - cpd_journal
- - cpd_entry
- - independent
-
+- course
+- file
+- link
+- curriculum
+- event
+- task
+- cpd_journal
+- cpd_entry
+- independent
 
 For event activities, the activity in the response will also contain a `session` object, for example:
 
@@ -905,19 +957,21 @@ For activities that have Continuing Professional Development (CPD) configured, t
 }
 ```
 
-> **Deprecation notice**  The `date` response property will be deprecated in favour of the new `occurred_date` response property.
+> **Deprecation notice** The `date` response property will be deprecated in favour of the new `occurred_date` response property.
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/GetUserActivity" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -931,6 +985,7 @@ curl -X "POST" "https://$API_HOST/GetUserActivity" \
 ```
 
 #### Users Activity
+
 You can use the _GetUsersActivity_ API to retrieve any and all activity that has occurred for any user since the supplied input date/time. You can also optionally restrict the results to records in a particular state. The number of activities returned is limited to `500`, and if you wish get more activities you should make additional requests using the `next_cursor` property from the previous response. This call happens in real-time.
 
 ```
@@ -946,6 +1001,7 @@ You can use the _GetUsersActivity_ API to retrieve any and all activity that has
 ```
 
 ##### Response
+
 ```
 {
     "activities": [
@@ -969,16 +1025,15 @@ You can use the _GetUsersActivity_ API to retrieve any and all activity that has
 
 The `friendly_type` attribute supports the following values:
 
- - course
- - file
- - link
- - curriculum
- - event
- - task
- - cpd_journal
- - cpd_entry
- - independent
-
+- course
+- file
+- link
+- curriculum
+- event
+- task
+- cpd_journal
+- cpd_entry
+- independent
 
 For event activities, the activity in the response will also contain a `session` object, for example:
 
@@ -1017,16 +1072,18 @@ For activities that have Continuing Professional Development (CPD) configured, t
 > **Deprecation notice** The `params.date` request property and the `date` and `completed_date` response properties will be deprecated in favour of the new `params.from_date` request property, and the `occurred_date` response property respectively.
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/GetUsersActivity" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -1040,6 +1097,7 @@ curl -X "POST" "https://$API_HOST/GetUsersActivity" \
 ```
 
 #### Users Certificates
+
 You can use the _GetUsersCertificates_ API to retrieve any and all certificates that have been awarded for any user since the supplied input date/time. The number of certificates returned is limited to `500`, and if you wish get more certificates you should make additional requests using the `next_cursor` property from the previous response. This call happens in real-time.
 
 ```
@@ -1054,6 +1112,7 @@ You can use the _GetUsersCertificates_ API to retrieve any and all certificates 
 ```
 
 ##### Response
+
 ```
 {
     "certificates": [
@@ -1073,16 +1132,18 @@ You can use the _GetUsersCertificates_ API to retrieve any and all certificates 
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/GetUsersCertificates" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -1097,9 +1158,11 @@ curl -X "POST" "https://$API_HOST/GetUsersCertificates" \
 ---
 
 ### Catalogue
+
 The catalogues APIs enable you to request information about your catalogue items.
 
 #### My Learning
+
 You can use the _GetMyLearning_ API to retrieve all that mandatory content items that are targeted to the passed user reference. This call happens in real-time.
 
 ```
@@ -1112,6 +1175,7 @@ You can use the _GetMyLearning_ API to retrieve all that mandatory content items
 ```
 
 ##### Response
+
 ```
 
 {
@@ -1130,16 +1194,18 @@ You can use the _GetMyLearning_ API to retrieve all that mandatory content items
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/GetMyLearning" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -1152,6 +1218,7 @@ curl -X "POST" "https://$API_HOST/GetMyLearning" \
 ```
 
 #### My Catalogue
+
 You can use the _GetMyCatalogue_ API to retrieve all content items that are targeted to the passed user reference. This call happens in real-time.
 
 ```
@@ -1164,6 +1231,7 @@ You can use the _GetMyCatalogue_ API to retrieve all content items that are targ
 ```
 
 ##### Response
+
 ```
 
 {
@@ -1182,16 +1250,18 @@ You can use the _GetMyCatalogue_ API to retrieve all content items that are targ
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/GetMyCatalogue" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -1218,20 +1288,22 @@ You can use the _EnrolLearner_ API to enrol a user on a content item i.e. a cata
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 400 | Bad Request – The user is not targeted to the content item |
-| 400 | Bad Request – There are no seats available on the session |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 404 | Not Found – The username cannot be found |
-| 404 | Not Found – The content item cannot be found |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 400   | Bad Request – The user is not targeted to the content item                             |
+| 400   | Bad Request – There are no seats available on the session                              |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found – The username cannot be found                                               |
+| 404   | Not Found – The content item cannot be found                                           |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/EnrolLearner" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -1259,19 +1331,21 @@ You can use the _UnenrolLearner_ API to unenrol a user from a content item i.e. 
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 400 | Bad Request – The user is not targeted to the content item |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 404 | Not Found – The username cannot be found |
-| 404 | Not Found – The content item cannot be found |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 400   | Bad Request – The user is not targeted to the content item                             |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found – The username cannot be found                                               |
+| 404   | Not Found – The content item cannot be found                                           |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/UnenrolLearner" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -1299,21 +1373,23 @@ You can use the _SetContentComplete_ API to mark a learner as complete for a cat
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 400 | Bad Request – The user is not targeted to the content item |
-| 400 | Bad Request – There are no seats available on the session |
-| 400 | Bad Request - Content not targeted |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 404 | Not Found – The username cannot be found |
-| 404 | Not Found – The content item cannot be found |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 400   | Bad Request – The user is not targeted to the content item                             |
+| 400   | Bad Request – There are no seats available on the session                              |
+| 400   | Bad Request - Content not targeted                                                     |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found – The username cannot be found                                               |
+| 404   | Not Found – The content item cannot be found                                           |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/SetContentComplete" \
      -H "Content-Type: application/json; charset=utf-8" \
@@ -1326,7 +1402,92 @@ curl -X "POST" "https://$API_HOST/SetContentComplete" \
 }'
 ```
 
+#### Set Content Available Offline
+
+You can use the _SetContentAvailableOffline_ API to mark a catalogue item available to a learner offline in the mobile application.
+
+```
+{
+    // Message arguments
+    params: {
+        uid: string,       // required, username
+        ref: string,       // required, content item external reference
+    },
+}
+```
+
+##### Return Codes
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 400   | Bad Request – The content item does not support offline consumption                    |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found – The username cannot be found                                               |
+| 404   | Not Found – The content item cannot be found                                           |
+| 429   | Too Many Requests - Rate limiting                                                      |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+
+```
+curl -X "POST" "https://$API_HOST/SetContentAvailableOffline" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "uid": "example",
+    "ref": "example"
+  }
+}'
+```
+
+#### Set Content Unavailable Offline
+
+You can use the _SetContentUnavailableOffline_ API to mark a catalogue item as unavailable to a learner offline in the mobile application.
+
+```
+{
+    // Message arguments
+    params: {
+        uid: string,       // required, username
+        ref: string,       // required, content item external reference
+    },
+}
+```
+
+##### Return Codes
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 400   | Bad Request – The content item does not support offline consumption                    |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found – The username cannot be found                                               |
+| 404   | Not Found – The content item cannot be found                                           |
+| 429   | Too Many Requests - Rate limiting                                                      |
+| 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
+
+##### Example
+
+```
+curl -X "POST" "https://$API_HOST/SetContentUnavailableOffline" \
+     -H "Content-Type: application/json; charset=utf-8" \
+     -u "scope:api_key" \
+     -d $'{
+  "params": {
+    "uid": "example",
+    "ref": "example"
+  }
+}'
+```
+
 #### Award a certificate
+
 You can use the _AwardCertificate_ API to award a certification to a user.
 
 You can optionally specify the attributes to be associated with the certification, including a score, awarded date, expiry date, and whether the user will receive a notification that includes a copy of their PDF certificate. You can optionally supply additional placeholder parameter values by passing a set of key/value pairs via the `extensions` attribute.
@@ -1353,22 +1514,24 @@ You can optionally specify the attributes to be associated with the certificatio
 
 The optional `awardMode` attribute supports the following values:
 
- - Manual - use this mode to award an arbitrary certification.
- - Award -  use this mode to award a certification to a user for the first time, and where you wish to use Civica Learning's certification renewal features.
- - Renew -  use this mode when renewing a certification previously awarded to a user.
+- Manual - use this mode to award an arbitrary certification.
+- Award - use this mode to award a certification to a user for the first time, and where you wish to use Civica Learning's certification renewal features.
+- Renew - use this mode when renewing a certification previously awarded to a user.
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 404 | Not Found - Their username cannot be found |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found - Their username cannot be found                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/AwardCertificate" \
      -H "Content-Type: application/json" \
@@ -1389,9 +1552,11 @@ curl -X "POST" "https://$API_HOST/AwardCertificate" \
 ---
 
 ### Continuing Professional Development (CPD)
+
 The CPD APIs enable you to perform CPD management tasks, such as creating, updating and listing journals.
 
 #### Create a journal
+
 You can use the _SetJournal_ API to create a CPD journal.
 
 You can specify the attributes to be associated with a CPD journal, including a start date, end date, submission date, status, target, and target mode.
@@ -1418,13 +1583,14 @@ You can specify the attributes to be associated with a CPD journal, including a 
 
 The optional `status` attribute supports the following values:
 
- - Pending
- - Submitted
- - Accepted
- - Rejected
- - YearBreak
+- Pending
+- Submitted
+- Accepted
+- Rejected
+- YearBreak
 
 ##### Response
+
 ```
 {
    "ref": string
@@ -1432,17 +1598,19 @@ The optional `status` attribute supports the following values:
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 404 | Not Found - Their username cannot be found |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found - Their username cannot be found                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/SetJournal" \
      -H "Content-Type: application/json" \
@@ -1462,6 +1630,7 @@ curl -X "POST" "https://$API_HOST/SetJournal" \
 ```
 
 #### Get journals
+
 You can use the _GetJournals_ API to retrieve all CPD journals to the passed user reference.
 
 ```
@@ -1474,6 +1643,7 @@ You can use the _GetJournals_ API to retrieve all CPD journals to the passed use
 ```
 
 ##### Response
+
 ```
 {
     "items": [
@@ -1491,17 +1661,19 @@ You can use the _GetJournals_ API to retrieve all CPD journals to the passed use
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 404 | Not Found - Their username cannot be found |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found - Their username cannot be found                                             |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/GetJournals" \
      -H "Content-Type: application/json" \
@@ -1514,6 +1686,7 @@ curl -X "POST" "https://$API_HOST/GetJournals" \
 ```
 
 #### Update a journal
+
 You can use the _SetJournal_ API to update a CPD journal.
 
 You can specify the attributes to be associated with a CPD journal, including a start date, end date, submission date, status, target, and target mode.
@@ -1541,13 +1714,14 @@ You can specify the attributes to be associated with a CPD journal, including a 
 
 The optional `status` attribute supports the following values:
 
- - Pending
- - Submitted
- - Accepted
- - Rejected
- - YearBreak
+- Pending
+- Submitted
+- Accepted
+- Rejected
+- YearBreak
 
 ##### Response
+
 ```
 {
   "ref": string
@@ -1555,17 +1729,19 @@ The optional `status` attribute supports the following values:
 ```
 
 ##### Return Codes
-| Code | Meaning |
-|:--|:--|
-| 200 | OK — Your request completed successfully |
-| 400 | Bad Request – Your request has an incorrect parameter |
-| 401 | Unauthorized – Your credentials are missing |
-| 403 | Forbidden – Your credentials are not valid |
-| 404 | Not Found - Their username or journal cannot be found |
-| 429 | Too Many Requests - Rate limiting |
+
+| Code  | Meaning                                                                                |
+| :---- | :------------------------------------------------------------------------------------- |
+| 200   | OK — Your request completed successfully                                               |
+| 400   | Bad Request – Your request has an incorrect parameter                                  |
+| 401   | Unauthorized – Your credentials are missing                                            |
+| 403   | Forbidden – Your credentials are not valid                                             |
+| 404   | Not Found - Their username or journal cannot be found                                  |
+| 429   | Too Many Requests - Rate limiting                                                      |
 | 50*n* | Server Error – We had a problem with our server or a remote gateway. Please contact us |
 
 ##### Example
+
 ```
 curl -X "POST" "https://$API_HOST/SetJournal" \
      -H "Content-Type: application/json" \
@@ -1585,6 +1761,7 @@ curl -X "POST" "https://$API_HOST/SetJournal" \
  }
 }'
 ```
+
 ---
 
 ### Learning Record Store (LRS)
