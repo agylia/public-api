@@ -1815,3 +1815,121 @@ curl -X "POST" "https://$API_HOST/GetLrsConfig" \
  }
 }'
 ```
+
+### Data Exports
+
+The data exports APIs enable you to perform user content and user certification exports.
+
+The _QueueJob_ API operates asynchronously, meaning after your request message has been validated the API will return a `202 Accepted`, and further processing of your request will continue.
+
+When you create a succesful request you will receive a `202 Accepted` response, and a `job_id` will be returned within the response body. You can then use the `job_id` to call the _GetJobStatus_ API to check on the status of your job, and once the status is set to `complete` you can call the _DownloadJobOutput_ API to retrieve the output.
+
+
+#### QueueJob
+
+You can use the _QueueJob_ API to create a user export request based on references for either content or certifications.
+
+To perform a user content export you need to add `content_users_export` to the `action` parameter in the request body, along with an array of relevant `refs` that you wish to report on. A ref is the `external reference` added to the properties page of a catalogue item in the admin portal. 
+
+Likewise, to perform a user certification export you need to add `certification_users_export` to the `action` parameter in the request body, along with an array of relevant `refs` that you wish to report on. A ref is the `external reference` added to the properties page of a certification in the admin portal. 
+
+These requests typically do not happen in real-time. After the request has been validated and accepted, the API returns a `202 Accepted`.
+
+```
+{
+    // Message arguments
+    params: {
+        action: string //required, content_users_export or certification_users_export
+        refs: array    //required, content item external reference or certification external reference
+    }
+}
+```
+
+Here is an example of how to create a queue job request:
+
+```
+curl -X "POST" "https://$API_HOST/QueueJob" \
+     -u "scope:api_key"
+     -d $'{
+  "params": {
+    "action": "content_users_export",
+    "refs": ["example1", "example2"]
+  }
+}'
+
+HTTP/1.1 202 Accepted
+Content-Type: application/json
+
+{"job_id":"38bd5821-a98e-42f9-93d2-9f2f570526d1"}
+```
+
+#### GetJobStatus
+
+You can use the _GetJobStatus_ API to determine the current status of your _QueueJob_. Simply add the `job_id` you were returned in your _QueueJob_ response to the request body and you will get the current status of the job.
+
+```
+{
+    // Message arguments
+    params: {
+        job_id: string //required
+    }
+}
+```
+
+Here is an example of how to create a get job status request:
+
+```
+curl -X "POST" "https://$API_HOST/GetJobStatus" \
+     -u "scope:api_key"
+     -d $'{
+  "params": {
+    "job_id": "38bd5821-a98e-42f9-93d2-9f2f570526d1",
+  }
+}'
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{"status":"complete"}
+
+```
+The `status` field contains the status of the request:
+
+| Status       | Meaning                                           |
+| :----------- | :------------------------------------------------ |
+| "pending"    | Status pending, request processing not started    |
+| "processing" | Status processing, request processing has started |
+| "complete"   | Status success, completed successfully            |
+| "error"      | Status error, completed with an error             |
+
+#### DownloadJobOutput
+
+Once the _GetJobStatus_ API returns a status of `complete`, you can then use the _DownloadJobOutput_ API to return the results of the original _QueueJob_ request. The results can be downnloaded in in the `format` of either `csv` or `json`. Again simply add the `job_id` you were returned in your _QueueJob_ response along with your desired `format` to the request body, and you will get the results of the job.
+
+```
+{
+    // Message arguments
+    params: {
+        job_id: string //required
+        format: string //required, csv or json
+    }
+}
+```
+
+Here is an example of how to create a download job output request:
+
+```
+curl -X "POST" "https://$API_HOST/DownloadJobOutput" \
+     -u "scope:api_key"
+     -d $'{
+  "params": {
+    "job_id": "38bd5821-a98e-42f9-93d2-9f2f570526d1",
+    "format": "json"
+  }
+}'
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{"rows":[{"enrolment":{"status":"not_enrolled"},"object":{"name":"example1","pass_score":90},"result":{"status":"not_attempted"},"user":{"forename":"example","mail":"example@example.com","surname":"test","upn":"testexample1"}}]}
+```
