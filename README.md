@@ -1848,7 +1848,7 @@ These requests typically do not happen in real-time. After the request has been 
 Here is an example of how to create a queue job request:
 
 ```
-curl -X "POST" "https://$API_HOST/QueueJob" \
+curl -X "POST" "https://$API_HOST/data-exports/QueueJob" \
      -u "scope:api_key"
      -d $'{
   "params": {
@@ -1879,7 +1879,7 @@ You can use the _GetJobStatus_ API to determine the current status of your _Queu
 Here is an example of how to create a get job status request:
 
 ```
-curl -X "POST" "https://$API_HOST/GetJobStatus" \
+curl -X "POST" "https://$API_HOST/data-exports/GetJobStatus" \
      -u "scope:api_key"
      -d $'{
   "params": {
@@ -1919,7 +1919,7 @@ Once the _GetJobStatus_ API returns a status of `complete`, you can then use the
 Here is an example of how to create a download job output request:
 
 ```
-curl -X "POST" "https://$API_HOST/DownloadJobOutput" \
+curl -X "POST" "https://$API_HOST/data-exports/DownloadJobOutput" \
      -u "scope:api_key"
      -d $'{
   "params": {
